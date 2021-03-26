@@ -28,7 +28,7 @@ app.use(session({                                           //Use session
 app.use(passport.initialize());                           //Initializing passport
 app.use(passport.session());                              // Use passport to manage sessions
 
-mongoose.connect("mongodb+srv://admin-harshit:Test123@cluster0.0ursx.mongodb.net/userDB",{useNewUrlParser: true, useUnifiedTopology: true,useCreateIndex: true });
+mongoose.connect(process.env.MONGO_DB_ATLAS,{useNewUrlParser: true, useUnifiedTopology: true,useCreateIndex: true });
 
 const userSchema = new mongoose.Schema({
   username: String,
@@ -58,8 +58,8 @@ passport.deserializeUser(function(id, done) {
 passport.use(new GoogleStrategy({                             ////Using google login startegy from passport
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: "https://pure-harbor-28541.herokuapp.com/auth/google/secrets",
-    userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
+    callbackURL: process.env.CALLBACK_URL,
+    userProfileURL: process.env.USERPROFILE_URL
   },
   function(accessToken, refreshToken, profile, cb) {                      //get access token in case of callback
     User.findOrCreate({ googleId: profile.id }, function (err, user) {
